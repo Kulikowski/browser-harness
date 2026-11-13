@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Todo board (WebMCP)</title>
+    <style>
+      body {
+        font: 16px/1.5 system-ui;
+        margin: 2rem;
+      }
+      li.done {
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Todo board</h1>
+    <p id="api">Checking for WebMCP…</p>
+    <ul id="todos"></ul>
+    <script type="module">
+      const todos = ["Buy strings", "Book the van"];
+      const list = document.getElementById("todos");
+      const draw = () => {
+        list.replaceChildren(...todos.map((t) => Object.assign(document.createElement("li"), { textContent: t })));
+      };
+      draw();
+      const ctx = document.modelContext;
+      document.getElementById("api").textContent = ctx ? "WebMCP: document.modelContext" : "No WebMCP in this browser";
+      if (ctx) {
+        await ctx.registerTool({
+          name: "list_todos",
+          title: "List todos",
+          description: "Every todo on the board, in order.",
+          inputSchema: { type: "object", properties: {} },
+          annotations: { readOnlyHint: true },
+          execute: async () => ({ todos })
+        });
+        await ctx.registerTool({
+          name: "add_todo",
+          title: "Add a todo",
+          description: "Add one todo to the end of the board.",
+          inputSchema: { type: "object", properties: { text: { type: "string" } }, required: ["text"] },
+          execute: async ({ text }) => {
+            todos.push(text);
+            draw();
+            return { added: text, count: todos.length };
+          }
+        });
+        await ctx.registerTool({
+          name: "clear_board",
+          title: "Clear the board",
+          description: "Delete every todo. Cannot be undone.",
+          inputSchema: { type: "object", properties: {} },
+          annotations: { consequentialHint: true },
+          execute: async () => {
+            todos.length = 0;
+            draw();
+            return { cleared: true };
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

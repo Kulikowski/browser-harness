@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Never answers (WebMCP)</title>
+  </head>
+  <body>
+    <h1>Never answers</h1>
+    <script>
+      // A broken or hostile page: its WebMCP never says what tools it has.
+      if (document.modelContext) document.modelContext.getTools = () => new Promise(() => {});
+    </script>
+  </body>
+</html>

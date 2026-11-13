@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Order form (no WebMCP)</title>
+    <style>
+      body {
+        font: 16px/1.5 system-ui;
+        margin: 2rem;
+      }
+      label {
+        display: block;
+        margin: 0.5rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Order a gig poster</h1>
+    <form id="order">
+      <label>Name <input name="name" autocomplete="off" /></label>
+      <label><input type="checkbox" name="signed" /> Signed by the band</label>
+      <button type="button" id="draft">Save draft</button>
+      <button>Submit order</button>
+    </form>
+    <p id="status" role="status">Nothing yet.</p>
+    <p><a href="https://example.com/">Visit the band's site</a></p>
+    <script>
+      const status = document.getElementById("status");
+      document.getElementById("draft").addEventListener("click", () => {
+        status.textContent = "Draft saved for " + (document.querySelector("[name=name]").value || "nobody");
+      });
+      document.getElementById("order").addEventListener("submit", (event) => {
+        event.preventDefault();
+        status.textContent = "Order submitted for " + document.querySelector("[name=name]").value;
+      });
+    </script>
+  </body>
+</html>

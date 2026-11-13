@@ -1,0 +1,48 @@
+{
+  "name": "browser-harness",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "description": "Chat in Chrome's side panel with the coding agent already on your machine (Claude Code, Codex, Antigravity CLI). The agent drives the page through WebMCP tools, or through the page itself when it has none. Zero API keys.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kulikowski/browser-harness.git"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.extension.json --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "npm run build && vitest run",
+    "test:e2e": "npm run build && playwright test",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test",
+    "install-host": "npm run build && node dist/bridge/install.js",
+    "uninstall-host": "node dist/bridge/install.js --uninstall"
+  },
+  "dependencies": {
+    "@agentclientprotocol/sdk": "2.6.0",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@playwright/test": "1.64.1",
+    "@types/chrome": "0.3.7",
+    "@types/node": "20.19.43",
+    "esbuild": "0.28.2",
+    "eslint": "9.39.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.14.0",
+    "preact": "10.29.8",
+    "prettier": "3.10.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.2",
+    "vitest": "4.1.12"
+  }
+}

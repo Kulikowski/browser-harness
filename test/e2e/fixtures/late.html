@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Slow starter (WebMCP)</title>
+  </head>
+  <body>
+    <h1>Slow starter</h1>
+    <p id="status">Starting up…</p>
+    <script type="module">
+      // Like WordUp: the page has WebMCP at once, but registers its tools only after it starts up.
+      // ?after=<ms> sets how long that takes (default 2.5 s).
+      const after = Number(new URLSearchParams(location.search).get("after") ?? 2500);
+      setTimeout(async () => {
+        await document.modelContext?.registerTool({
+          name: "get_status",
+          description: "Whether the app has finished starting.",
+          inputSchema: { type: "object", properties: {} },
+          annotations: { readOnlyHint: true },
+          execute: async () => ({ ready: true })
+        });
+        document.getElementById("status").textContent = "Ready";
+      }, after);
+    </script>
+  </body>
+</html>
